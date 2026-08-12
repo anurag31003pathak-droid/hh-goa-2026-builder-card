@@ -8,6 +8,7 @@ import { Toast } from './components/Toast';
 import {
   BuilderData,
   DEFAULT_BUILDER,
+  DEMO_PHOTO_ASSET,
   CardThemeId,
   CardLayoutId,
   CardBgType,
@@ -25,10 +26,14 @@ export const App: React.FC = () => {
   const [builderData, setBuilderData] = useState<BuilderData>(() => {
     if (typeof window !== 'undefined') {
       try {
-        const saved = localStorage.getItem('hh-goa-builder-data-v2');
+        const saved = localStorage.getItem('hh-goa-builder-data-v3');
         if (saved) {
           const parsed = JSON.parse(saved);
           if (parsed && typeof parsed === 'object') {
+            // Discard temporary blob URLs from local storage
+            if (parsed.photoUrl && (typeof parsed.photoUrl !== 'string' || parsed.photoUrl.startsWith('blob:'))) {
+              delete parsed.photoUrl;
+            }
             return { ...DEFAULT_BUILDER, ...parsed };
           }
         }
@@ -47,10 +52,14 @@ export const App: React.FC = () => {
 
   const cardRef = useRef<HTMLDivElement>(null);
 
-  // Safe client-side persistence
+  // Safe client-side persistence (do not store blob: URLs)
   useEffect(() => {
     try {
-      localStorage.setItem('hh-goa-builder-data-v2', JSON.stringify(builderData));
+      const dataToSave = { ...builderData };
+      if (dataToSave.photoUrl && dataToSave.photoUrl.startsWith('blob:')) {
+        delete dataToSave.photoUrl;
+      }
+      localStorage.setItem('hh-goa-builder-data-v3', JSON.stringify(dataToSave));
     } catch (err) {
       // Non-blocking
     }
@@ -105,12 +114,6 @@ export const App: React.FC = () => {
 
   const handleGenerateClick = () => {
     setValidationError(null);
-
-    if (!builderData.name.trim()) {
-      setValidationError('Please enter your name.');
-      return;
-    }
-
     setIsGenerating(true);
   };
 
@@ -129,7 +132,7 @@ export const App: React.FC = () => {
     setIsGenerated(false);
     setBuilderData(DEFAULT_BUILDER);
     try {
-      localStorage.removeItem('hh-goa-builder-data-v2');
+      localStorage.removeItem('hh-goa-builder-data-v3');
     } catch (err) {
       // Ignore
     }

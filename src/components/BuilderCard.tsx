@@ -1,5 +1,5 @@
 import React from 'react';
-import { BuilderData, CardThemeId, PhotoShape, PhotoFilter, CARD_BG_OPTIONS, ASPECT_RATIO_OPTIONS, DEMO_PHOTO_ASSET } from '../types/builder';
+import { BuilderData, PhotoShape, PhotoFilter, CARD_BG_OPTIONS, ASPECT_RATIO_OPTIONS, DEMO_PHOTO_ASSET } from '../types/builder';
 import { ShieldCheck, Terminal, Zap, QrCode, Cpu, AtSign, MapPin } from 'lucide-react';
 
 interface BuilderCardProps {
@@ -43,7 +43,7 @@ export const BuilderCard: React.FC<BuilderCardProps> = ({ data, cardRef }) => {
 
   const rotation = data.photoRotation || 0;
   // Guaranteed Photo URL with ES module asset fallback
-  const displayPhotoUrl = data.photoUrl || DEMO_PHOTO_ASSET;
+  const displayPhotoUrl = (data.photoUrl && !data.photoUrl.startsWith('blob:')) ? data.photoUrl : DEMO_PHOTO_ASSET;
 
   return (
     <div
@@ -139,6 +139,9 @@ export const BuilderCard: React.FC<BuilderCardProps> = ({ data, cardRef }) => {
             <img
               src={displayPhotoUrl}
               alt={displayName}
+              onError={(e) => {
+                e.currentTarget.src = DEMO_PHOTO_ASSET;
+              }}
               className={`w-full h-full object-cover ${shapeClass} ${focalClass} transition-all`}
               style={{
                 transform: `scale(${data.photoZoom || 1.0}) translate(${data.photoOffsetX || 0}%, ${data.photoOffsetY || 0}%) rotate(${rotation}deg)`,
