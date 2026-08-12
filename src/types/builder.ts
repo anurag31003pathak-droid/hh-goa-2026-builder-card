@@ -1,3 +1,8 @@
+import demoBuilderPhoto from '../assets/demo_builder_photo.png';
+import goaBeachBg from '../assets/goa_beach_bg.png';
+import goaSunsetBg from '../assets/goa_sunset_bg.png';
+import tropicalOceanBg from '../assets/tropical_ocean_bg.png';
+
 export type RoleType = 
   | 'AI Engineer'
   | 'Full Stack Developer'
@@ -94,8 +99,10 @@ export interface BuilderData {
   aspectRatio: AspectRatioType;
 }
 
+export const DEMO_PHOTO_ASSET = demoBuilderPhoto;
+
 export const DEFAULT_BUILDER: BuilderData = {
-  photoUrl: '/demo_builder_photo.png',
+  photoUrl: demoBuilderPhoto,
   name: 'Anurag Pathak',
   role: 'AI Engineer',
   customRole: '',
@@ -162,9 +169,9 @@ export const ASPECT_RATIO_OPTIONS: AspectRatioOption[] = [
 ];
 
 export const CARD_BG_OPTIONS: { id: CardBgType; name: string; imgUrl?: string }[] = [
-  { id: 'goa-beach', name: 'Goa Beach', imgUrl: '/goa_beach_bg.png' },
-  { id: 'goa-sunset', name: 'Goa Sunset', imgUrl: '/goa_sunset_bg.png' },
-  { id: 'tropical-ocean', name: 'Tropical Ocean', imgUrl: '/tropical_ocean_bg.png' },
+  { id: 'goa-beach', name: 'Goa Beach', imgUrl: goaBeachBg },
+  { id: 'goa-sunset', name: 'Goa Sunset', imgUrl: goaSunsetBg },
+  { id: 'tropical-ocean', name: 'Tropical Ocean', imgUrl: tropicalOceanBg },
   { id: 'tropical-green', name: 'Tropical Green' },
   { id: 'dark-terminal', name: 'Dark Terminal' },
   { id: 'minimal-cream', name: 'Minimal Cream' }

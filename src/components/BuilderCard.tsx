@@ -1,5 +1,5 @@
 import React from 'react';
-import { BuilderData, CardThemeId, CardLayoutId, PhotoShape, PhotoFilter, CardBgType, CARD_BG_OPTIONS, ASPECT_RATIO_OPTIONS } from '../types/builder';
+import { BuilderData, CardThemeId, PhotoShape, PhotoFilter, CARD_BG_OPTIONS, ASPECT_RATIO_OPTIONS, DEMO_PHOTO_ASSET } from '../types/builder';
 import { ShieldCheck, Terminal, Zap, QrCode, Cpu, AtSign, MapPin } from 'lucide-react';
 
 interface BuilderCardProps {
@@ -12,7 +12,6 @@ export const BuilderCard: React.FC<BuilderCardProps> = ({ data, cardRef }) => {
   const displayTitle = data.title || 'THE GOA BUILDER';
   const displayName = data.name.trim() || 'ANURAG PATHAK';
   const focalClass = data.focalPosition === 'top' ? 'object-top' : data.focalPosition === 'bottom' ? 'object-bottom' : 'object-center';
-  const themeId: CardThemeId = data.cardTheme || '01-goa-sunset';
   const statusText = data.statusBadge || 'READY TO BUILD';
   const mottoText = data.motto || 'BUILT TO SHIP.';
   const builderIdCode = data.serialNumber || 'HH26-ANU-01';
@@ -43,6 +42,8 @@ export const BuilderCard: React.FC<BuilderCardProps> = ({ data, cardRef }) => {
   }[data.photoFilter || 'natural'];
 
   const rotation = data.photoRotation || 0;
+  // Guaranteed Photo URL with ES module asset fallback
+  const displayPhotoUrl = data.photoUrl || DEMO_PHOTO_ASSET;
 
   return (
     <div
@@ -135,23 +136,15 @@ export const BuilderCard: React.FC<BuilderCardProps> = ({ data, cardRef }) => {
         <div className={`relative ${data.aspectRatio === '1:1' ? 'w-[420px] h-[420px]' : data.aspectRatio === '9:16' ? 'w-[560px] h-[560px]' : 'w-[520px] h-[520px]'} ${shapeClass} p-[8px] bg-gradient-to-b from-[#F4C542] via-[#063B2F] to-[#10B981] shadow-[0_0_50px_rgba(6,59,47,0.6)]`}>
           <div className={`w-full h-full ${shapeClass} bg-[#063B2F] p-[6px] overflow-hidden relative`}>
             
-            {data.photoUrl ? (
-              <img
-                src={data.photoUrl}
-                alt={displayName}
-                className={`w-full h-full object-cover ${shapeClass} ${focalClass} transition-all`}
-                style={{
-                  transform: `scale(${data.photoZoom || 1.0}) translate(${data.photoOffsetX || 0}%, ${data.photoOffsetY || 0}%) rotate(${rotation}deg)`,
-                  filter: filterStyle
-                }}
-              />
-            ) : (
-              <div className={`w-full h-full ${shapeClass} bg-[#063B2F]/80 flex flex-col items-center justify-center p-8 text-center border-2 border-dashed border-[#10B981]`}>
-                <Cpu className="w-[80px] h-[80px] text-[#F4C542] mb-3 animate-pulse" />
-                <h3 className="text-[26px] font-bold text-white font-heading uppercase">YOUR BUILDER ID</h3>
-                <p className="text-[14px] font-mono-code text-[#10B981] mt-1">OCT 28–31, 2026 • GOA</p>
-              </div>
-            )}
+            <img
+              src={displayPhotoUrl}
+              alt={displayName}
+              className={`w-full h-full object-cover ${shapeClass} ${focalClass} transition-all`}
+              style={{
+                transform: `scale(${data.photoZoom || 1.0}) translate(${data.photoOffsetX || 0}%, ${data.photoOffsetY || 0}%) rotate(${rotation}deg)`,
+                filter: filterStyle
+              }}
+            />
 
             <div className="absolute inset-0 bg-scanline pointer-events-none opacity-30" />
 
