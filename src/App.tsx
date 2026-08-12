@@ -8,41 +8,18 @@ import { Toast } from './components/Toast';
 import {
   BuilderData,
   DEFAULT_BUILDER,
-  DEMO_PHOTO_ASSET,
-  CardThemeId,
-  CardLayoutId,
-  CardBgType,
-  VibePreset,
   CARD_THEME_OPTIONS,
   CARD_LAYOUT_OPTIONS,
-  CARD_BG_OPTIONS
+  CARD_BG_OPTIONS,
+  VibePreset
 } from './types/builder';
 import { generateTitle } from './utils/titleGenerator';
 import { exportCardAsPng } from './utils/imageGenerator';
 import { ArrowRight, AlertCircle, Shield, CheckCircle2 } from 'lucide-react';
 
 export const App: React.FC = () => {
-  // Hydration-Safe State Initialization with DEFAULT_BUILDER Fallback
-  const [builderData, setBuilderData] = useState<BuilderData>(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        const saved = localStorage.getItem('hh-goa-builder-data-v3');
-        if (saved) {
-          const parsed = JSON.parse(saved);
-          if (parsed && typeof parsed === 'object') {
-            // Discard temporary blob URLs from local storage
-            if (parsed.photoUrl && (typeof parsed.photoUrl !== 'string' || parsed.photoUrl.startsWith('blob:'))) {
-              delete parsed.photoUrl;
-            }
-            return { ...DEFAULT_BUILDER, ...parsed };
-          }
-        }
-      } catch (err) {
-        // Fallback to DEFAULT_BUILDER silently
-      }
-    }
-    return DEFAULT_BUILDER;
-  });
+  // Always initialize with DEFAULT_BUILDER so inputs are clean empty strings
+  const [builderData, setBuilderData] = useState<BuilderData>(DEFAULT_BUILDER);
 
   const [titleCycleIndex, setTitleCycleIndex] = useState<number>(0);
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
@@ -52,23 +29,23 @@ export const App: React.FC = () => {
 
   const cardRef = useRef<HTMLDivElement>(null);
 
-  // Safe client-side persistence (do not store blob: URLs)
+  // Clear legacy local storage keys on mount
   useEffect(() => {
     try {
-      const dataToSave = { ...builderData };
-      if (dataToSave.photoUrl && dataToSave.photoUrl.startsWith('blob:')) {
-        delete dataToSave.photoUrl;
-      }
-      localStorage.setItem('hh-goa-builder-data-v3', JSON.stringify(dataToSave));
+      localStorage.removeItem('hh-goa-builder-data');
+      localStorage.removeItem('hh-goa-builder-data-v2');
+      localStorage.removeItem('hh-goa-builder-data-v3');
     } catch (err) {
       // Non-blocking
     }
-  }, [builderData]);
+  }, []);
 
   const handleShuffleTitle = () => {
     setTitleCycleIndex(prev => {
       const nextIndex = prev + 1;
-      const nextTitle = generateTitle(builderData.role, builderData.stack, nextIndex);
+      const currentRole = builderData.role || 'AI Engineer';
+      const currentStack = builderData.stack.length > 0 ? builderData.stack : ['React', 'AI', 'Node.js'];
+      const nextTitle = generateTitle(currentRole, currentStack, nextIndex);
       setBuilderData(d => ({ ...d, title: nextTitle }));
       return nextIndex;
     });
@@ -98,7 +75,9 @@ export const App: React.FC = () => {
     const randomTheme = CARD_THEME_OPTIONS[Math.floor(Math.random() * CARD_THEME_OPTIONS.length)].id;
     const randomLayout = CARD_LAYOUT_OPTIONS[Math.floor(Math.random() * CARD_LAYOUT_OPTIONS.length)].id;
     const nextIndex = titleCycleIndex + 1;
-    const nextTitle = generateTitle(builderData.role, builderData.stack, nextIndex);
+    const currentRole = builderData.role || 'AI Engineer';
+    const currentStack = builderData.stack.length > 0 ? builderData.stack : ['React', 'AI', 'Node.js'];
+    const nextTitle = generateTitle(currentRole, currentStack, nextIndex);
 
     setTitleCycleIndex(nextIndex);
     setBuilderData(prev => ({
@@ -131,11 +110,6 @@ export const App: React.FC = () => {
   const handleReset = () => {
     setIsGenerated(false);
     setBuilderData(DEFAULT_BUILDER);
-    try {
-      localStorage.removeItem('hh-goa-builder-data-v3');
-    } catch (err) {
-      // Ignore
-    }
     setValidationError(null);
     setToastMessage('↻ Reset to default example Builder Card!');
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -143,7 +117,7 @@ export const App: React.FC = () => {
 
   const handleDownloadPNG = async (scaleFactor: number): Promise<boolean> => {
     if (!cardRef.current) return false;
-    const cleanFileName = (builderData.name.trim() || 'Builder').replace(/\s+/g, '-');
+    const cleanFileName = (builderData.name.trim() || 'Anurag-Pathak').replace(/\s+/g, '-');
     return await exportCardAsPng(cardRef.current, `HH-Goa-2026-${cleanFileName}`, scaleFactor);
   };
 
@@ -247,7 +221,7 @@ export const App: React.FC = () => {
                 onDownload={handleDownloadPNG}
                 onReset={handleReset}
                 onSurpriseMe={handleSurpriseMe}
-                userName={builderData.name}
+                userName={builderData.name || 'Anurag Pathak'}
                 onToast={(msg) => setToastMessage(msg)}
               />
 

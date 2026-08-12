@@ -11,11 +11,12 @@ export const BuilderCard: React.FC<BuilderCardProps> = ({ data, cardRef }) => {
   const displayRole = data.role === 'Other' ? (data.customRole || 'BUILDER') : data.role;
   const displayTitle = data.title || 'THE GOA BUILDER';
   const displayName = data.name.trim() || 'ANURAG PATHAK';
-  const displayHandle = data.socialHandle ? data.socialHandle.replace(/^@/, '') : 'anuragpathak';
+  const displayHandle = data.socialHandle?.trim() ? data.socialHandle.replace(/^@/, '') : 'anuragpathak';
   const focalClass = data.focalPosition === 'top' ? 'object-top' : data.focalPosition === 'bottom' ? 'object-bottom' : 'object-center';
   const statusText = data.statusBadge || 'READY TO BUILD';
-  const mottoText = data.motto || 'BUILT TO SHIP.';
-  const builderIdCode = data.serialNumber || 'HH26-ANU-01';
+  const mottoText = data.motto?.trim() || 'BUILT TO SHIP.';
+  const builderIdCode = data.serialNumber?.trim() || 'HH26-ANU-01';
+  const displayStack = data.stack.length > 0 ? data.stack : ['React', 'Node.js', 'AI', 'Python'];
   const layoutId = data.cardLayout || '01-builder-pass';
 
   // Dimension config based on aspect ratio
@@ -89,7 +90,6 @@ export const BuilderCard: React.FC<BuilderCardProps> = ({ data, cardRef }) => {
       {/* ================= LAYOUT VARIATION 03: TERMINAL PASS ================= */}
       {layoutId === '03-terminal-pass' && (
         <>
-          {/* Top Hacker Terminal Bar */}
           <div className="relative z-10 pt-2 flex items-center justify-between border-b border-[#10B981]/40 pb-3">
             <div className="flex items-center gap-2">
               <span className="w-3.5 h-3.5 rounded-full bg-red-500 inline-block" />
@@ -104,7 +104,6 @@ export const BuilderCard: React.FC<BuilderCardProps> = ({ data, cardRef }) => {
             </span>
           </div>
 
-          {/* Terminal Body Grid */}
           <div className="relative z-10 my-auto grid grid-cols-12 gap-6 items-center">
             <div className="col-span-5 flex justify-center">
               <div className={`relative w-[340px] h-[340px] ${shapeClass} p-[6px] bg-[#10B981] shadow-[0_0_40px_rgba(16,185,129,0.4)]`}>
@@ -138,10 +137,10 @@ export const BuilderCard: React.FC<BuilderCardProps> = ({ data, cardRef }) => {
                 <p className="text-[12px] text-[#10B981] font-bold">&gt; TITLE:</p>
                 <p className="text-[22px] text-white font-extrabold uppercase">"{displayTitle}"</p>
               </div>
-              {data.stack.length > 0 && (
+              {displayStack.length > 0 && (
                 <div className="pt-1">
                   <p className="text-[12px] text-[#10B981] font-bold">&gt; STACK_STACK:</p>
-                  <p className="text-[14px] text-[#E9F0EA] font-mono-code">{data.stack.join(' • ')}</p>
+                  <p className="text-[14px] text-[#E9F0EA] font-mono-code">{displayStack.join(' • ')}</p>
                 </div>
               )}
             </div>
@@ -241,9 +240,9 @@ export const BuilderCard: React.FC<BuilderCardProps> = ({ data, cardRef }) => {
               </h1>
               <p className="text-[20px] font-mono-code text-[#10B981] font-bold uppercase">{displayRole}</p>
               <p className="text-[22px] font-mono-code font-extrabold text-[#F4C542] uppercase">"{displayTitle}"</p>
-              {data.stack.length > 0 && (
+              {displayStack.length > 0 && (
                 <div className="flex flex-wrap gap-2 pt-2">
-                  {data.stack.slice(0, 5).map((tech, i) => (
+                  {displayStack.slice(0, 5).map((tech, i) => (
                     <span key={i} className="px-3 py-1 rounded-lg text-[13px] font-mono-code bg-[#063B2F] text-[#FFF7E6] border border-[#10B981]">
                       {tech}
                     </span>
@@ -367,9 +366,9 @@ export const BuilderCard: React.FC<BuilderCardProps> = ({ data, cardRef }) => {
               <div className="h-[2px] w-16 bg-gradient-to-l from-transparent to-[#F4C542]" />
             </div>
 
-            {data.stack.length > 0 && (
+            {displayStack.length > 0 && (
               <div className="flex flex-wrap items-center justify-center gap-2.5 pt-0.5">
-                {data.stack.slice(0, 5).map((tech, i) => (
+                {displayStack.slice(0, 5).map((tech, i) => (
                   <span key={i} className="px-3.5 py-1 rounded-xl text-[15px] font-mono-code font-semibold bg-[#063B2F] text-[#FFF7E6] border border-[#10B981]/50 shadow">
                     {tech}
                   </span>
