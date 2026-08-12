@@ -110,7 +110,7 @@ export const DEFAULT_BUILDER: BuilderData = {
   title: 'THE MODEL WHISPERER',
   serialNumber: 'HH26-ANU-01',
   socialHandle: '',
-  motto: 'BUILT TO SHIP.',
+  motto: '',
   statusBadge: 'READY TO BUILD',
   photoZoom: 1.0,
   photoOffsetX: 0,
@@ -223,23 +223,23 @@ export const CARD_THEME_OPTIONS: CardThemeOption[] = [
 export const CARD_LAYOUT_OPTIONS: CardLayoutOption[] = [
   {
     id: '01-builder-pass',
-    name: 'PORTRAIT BUILDER PASS',
-    description: '1080 × 1350 event pass credential'
+    name: 'Layout 01 — BUILDER PASS',
+    description: 'Classic vertical credential badge pass'
   },
   {
     id: '02-beach-pass',
-    name: 'SQUARE SOCIAL PASS',
-    description: '1080 × 1080 profile avatar pass'
+    name: 'Layout 02 — BEACH PASS',
+    description: 'Hero photo grid + tropical identity badge'
   },
   {
     id: '03-terminal-pass',
-    name: 'STORY PASS',
-    description: '1080 × 1920 fullscreen mobile story'
+    name: 'Layout 03 — TERMINAL PASS',
+    description: 'Night hacker code window composition'
   },
   {
     id: '04-creator-pass',
-    name: 'LANDSCAPE BUILDER PASS',
-    description: '1200 × 675 landscape header pass'
+    name: 'Layout 04 — CREATOR PASS',
+    description: 'Horizontal split pass + prominent stack'
   }
 ];
 
