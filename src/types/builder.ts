@@ -94,6 +94,34 @@ export interface BuilderData {
   aspectRatio: AspectRatioType;
 }
 
+export const DEFAULT_BUILDER: BuilderData = {
+  photoUrl: '/demo_builder_photo.png',
+  name: 'Anurag Pathak',
+  role: 'AI Engineer',
+  customRole: '',
+  stack: ['React', 'Node.js', 'AI', 'Python'],
+  title: 'THE MODEL WHISPERER',
+  serialNumber: 'HH26-ANU-01',
+  socialHandle: 'anuragpathak',
+  motto: 'BUILT TO SHIP.',
+  statusBadge: 'READY TO BUILD',
+  photoZoom: 1.0,
+  photoOffsetX: 0,
+  photoOffsetY: 0,
+  photoRotation: 0,
+  focalPosition: 'top',
+  photoShape: 'rounded-rect',
+  photoFilter: 'natural',
+  cardBgType: 'goa-beach',
+  cardBgOffsetX: 0,
+  cardBgOffsetY: 0,
+  cardBgZoom: 1.0,
+  cardBgOverlay: 55,
+  cardTheme: '01-goa-sunset',
+  cardLayout: '01-builder-pass',
+  aspectRatio: '4:5'
+};
+
 export const PRESET_ROLES: RoleType[] = [
   'AI Engineer',
   'Full Stack Developer',

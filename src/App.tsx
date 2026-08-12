@@ -7,6 +7,7 @@ import { GenerationModal } from './components/GenerationModal';
 import { Toast } from './components/Toast';
 import {
   BuilderData,
+  DEFAULT_BUILDER,
   CardThemeId,
   CardLayoutId,
   CardBgType,
@@ -15,41 +16,27 @@ import {
   CARD_LAYOUT_OPTIONS,
   CARD_BG_OPTIONS
 } from './types/builder';
-import { generateTitle, generateRandomSerialNumber } from './utils/titleGenerator';
+import { generateTitle } from './utils/titleGenerator';
 import { exportCardAsPng } from './utils/imageGenerator';
 import { ArrowRight, AlertCircle, Shield, CheckCircle2 } from 'lucide-react';
 
 export const App: React.FC = () => {
-  // App State
-  const [builderData, setBuilderData] = useState<BuilderData>({
-    photoUrl: null,
-    name: 'Anurag Pathak',
-    role: 'AI Engineer',
-    customRole: '',
-    stack: ['React', 'Node.js', 'AI', 'Python'],
-    title: 'THE MODEL WHISPERER',
-    serialNumber: 'HH26-ANU-01',
-    socialHandle: 'anuragpathak',
-    motto: 'BUILT TO SHIP.',
-    statusBadge: 'READY TO BUILD',
-    // Photo controls
-    photoZoom: 1.0,
-    photoOffsetX: 0,
-    photoOffsetY: 0,
-    photoRotation: 0,
-    focalPosition: 'top',
-    photoShape: 'rounded-rect',
-    photoFilter: 'natural',
-    // Card Background controls
-    cardBgType: 'goa-beach',
-    cardBgOffsetX: 0,
-    cardBgOffsetY: 0,
-    cardBgZoom: 1.0,
-    cardBgOverlay: 55,
-    // Styling & Layout
-    cardTheme: '01-goa-sunset',
-    cardLayout: '01-builder-pass',
-    aspectRatio: '4:5'
+  // Hydration-Safe State Initialization with DEFAULT_BUILDER Fallback
+  const [builderData, setBuilderData] = useState<BuilderData>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const saved = localStorage.getItem('hh-goa-builder-data-v2');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed && typeof parsed === 'object') {
+            return { ...DEFAULT_BUILDER, ...parsed };
+          }
+        }
+      } catch (err) {
+        // Fallback to DEFAULT_BUILDER silently
+      }
+    }
+    return DEFAULT_BUILDER;
   });
 
   const [titleCycleIndex, setTitleCycleIndex] = useState<number>(0);
@@ -60,12 +47,14 @@ export const App: React.FC = () => {
 
   const cardRef = useRef<HTMLDivElement>(null);
 
+  // Safe client-side persistence
   useEffect(() => {
-    setBuilderData(prev => ({
-      ...prev,
-      title: generateTitle(prev.role, prev.stack, 0)
-    }));
-  }, []);
+    try {
+      localStorage.setItem('hh-goa-builder-data-v2', JSON.stringify(builderData));
+    } catch (err) {
+      // Non-blocking
+    }
+  }, [builderData]);
 
   const handleShuffleTitle = () => {
     setTitleCycleIndex(prev => {
@@ -117,11 +106,6 @@ export const App: React.FC = () => {
   const handleGenerateClick = () => {
     setValidationError(null);
 
-    if (!builderData.photoUrl) {
-      setValidationError('Upload a photo to create your Builder Card.');
-      return;
-    }
-
     if (!builderData.name.trim()) {
       setValidationError('Please enter your name.');
       return;
@@ -143,34 +127,14 @@ export const App: React.FC = () => {
 
   const handleReset = () => {
     setIsGenerated(false);
-    setBuilderData({
-      photoUrl: null,
-      name: '',
-      role: 'AI Engineer',
-      customRole: '',
-      stack: ['React', 'Node.js', 'AI'],
-      title: 'THE MODEL WHISPERER',
-      serialNumber: generateRandomSerialNumber(),
-      socialHandle: '',
-      motto: 'BUILT TO SHIP.',
-      statusBadge: 'READY TO BUILD',
-      photoZoom: 1.0,
-      photoOffsetX: 0,
-      photoOffsetY: 0,
-      photoRotation: 0,
-      focalPosition: 'top',
-      photoShape: 'rounded-rect',
-      photoFilter: 'natural',
-      cardBgType: 'goa-beach',
-      cardBgOffsetX: 0,
-      cardBgOffsetY: 0,
-      cardBgZoom: 1.0,
-      cardBgOverlay: 55,
-      cardTheme: '01-goa-sunset',
-      cardLayout: '01-builder-pass',
-      aspectRatio: '4:5'
-    });
+    setBuilderData(DEFAULT_BUILDER);
+    try {
+      localStorage.removeItem('hh-goa-builder-data-v2');
+    } catch (err) {
+      // Ignore
+    }
     setValidationError(null);
+    setToastMessage('↻ Reset to default example Builder Card!');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
