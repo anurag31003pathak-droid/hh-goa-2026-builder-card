@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Download, RefreshCw, Check, Sparkles, Twitter, Sliders, Dices } from 'lucide-react';
+import { Download, RefreshCw, Check, Sparkles, Twitter, Linkedin, Dices } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 interface ActionButtonsProps {
@@ -68,6 +68,21 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({
     onToast('Opened X share intent with #FrameInGoa!');
   };
 
+  const handleShareToLinkedIn = () => {
+    const nameToUse = userName.trim() || 'Builder';
+    const linkedinCaption = `Excited to share my Hacker House Goa 2026 Builder ID Card! 🏝️⚡\n\nReady to build, experiment, and collaborate with top builders in Goa, India.\n\n📅 Event: OCT 28–31, 2026\n📍 Location: Goa, India\n\n#FrameInGoa #HackerHouseGoa #BuildInGoa #Web3 #AI`;
+    
+    // Copy caption to clipboard for user convenience
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(linkedinCaption).catch(() => {});
+    }
+
+    const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(linkedinCaption)}`;
+    window.open(linkedInUrl, '_blank', 'noopener,noreferrer');
+
+    onToast('Opened LinkedIn Share! Caption copied to clipboard. 🚀');
+  };
+
   return (
     <div className="w-full space-y-4 pt-2">
       
@@ -108,28 +123,28 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({
         </div>
       </div>
 
-      {/* Main Action Buttons */}
-      <div className="flex flex-col sm:flex-row items-center gap-3">
+      {/* Main Action Buttons Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
         {/* Download Button */}
         <button
           type="button"
           onClick={handleDownloadClick}
           disabled={isDownloading}
-          className="w-full sm:flex-1 py-3.5 px-6 rounded-xl bg-gradient-to-r from-[#F4C542] via-[#FFD700] to-[#F4C542] text-[#063B2F] font-bold font-heading text-base flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(244,197,66,0.3)] hover:brightness-110 active:scale-[0.98] transition-all cursor-pointer disabled:opacity-50"
+          className="py-3 px-4 rounded-xl bg-gradient-to-r from-[#F4C542] via-[#FFD700] to-[#F4C542] text-[#063B2F] font-bold font-heading text-sm sm:text-base flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(244,197,66,0.3)] hover:brightness-110 active:scale-[0.98] transition-all cursor-pointer disabled:opacity-50"
         >
           {isDownloading ? (
             <>
-              <RefreshCw className="w-5 h-5 animate-spin" />
-              <span>Generating PNG...</span>
+              <RefreshCw className="w-4 h-4 animate-spin" />
+              <span>Exporting...</span>
             </>
           ) : downloadSuccess ? (
             <>
-              <Check className="w-5 h-5 text-emerald-950" />
-              <span>Card Downloaded!</span>
+              <Check className="w-4 h-4 text-emerald-950" />
+              <span>Downloaded!</span>
             </>
           ) : (
             <>
-              <Download className="w-5 h-5" />
+              <Download className="w-4 h-4" />
               <span>↓ DOWNLOAD PNG</span>
             </>
           )}
@@ -139,10 +154,20 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({
         <button
           type="button"
           onClick={handleShareToX}
-          className="w-full sm:flex-1 py-3.5 px-6 rounded-xl bg-[#063B2F] hover:bg-[#10B981] text-white border border-[#10B981]/50 font-bold font-heading text-base flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.2)] active:scale-[0.98] transition-all cursor-pointer"
+          className="py-3 px-4 rounded-xl bg-[#063B2F] hover:bg-[#10B981] text-white border border-[#10B981]/50 font-bold font-heading text-sm sm:text-base flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(16,185,129,0.2)] active:scale-[0.98] transition-all cursor-pointer"
         >
-          <Twitter className="w-5 h-5 text-[#F4C542]" />
+          <Twitter className="w-4 h-4 text-[#F4C542]" />
           <span>𝕏 SHARE TO X</span>
+        </button>
+
+        {/* Share to LinkedIn Button */}
+        <button
+          type="button"
+          onClick={handleShareToLinkedIn}
+          className="py-3 px-4 rounded-xl bg-[#0A66C2] hover:bg-[#004182] text-white font-bold font-heading text-sm sm:text-base flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(10,102,194,0.3)] active:scale-[0.98] transition-all cursor-pointer"
+        >
+          <Linkedin className="w-4 h-4 text-white" />
+          <span>in LINKEDIN</span>
         </button>
       </div>
 
