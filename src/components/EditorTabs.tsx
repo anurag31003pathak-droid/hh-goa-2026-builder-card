@@ -122,7 +122,9 @@ export const EditorTabs: React.FC<EditorTabsProps> = ({
                   type="text"
                   value={data.name}
                   onChange={(e) => onDataChange(prev => ({ ...prev, name: e.target.value }))}
-                  placeholder="Anurag Pathak"
+                  onFocus={(e) => e.target.select()}
+                  autoComplete="off"
+                  placeholder="e.g. Anurag Pathak"
                   maxLength={32}
                   className="w-full pl-9 pr-3 py-2 rounded-xl bg-[#082C2A] border border-[#8CAAA0]/30 text-white placeholder-gray-500 focus:outline-none focus:border-[#F4C542] text-xs font-medium"
                 />
@@ -141,7 +143,9 @@ export const EditorTabs: React.FC<EditorTabsProps> = ({
                   type="text"
                   value={data.socialHandle || ''}
                   onChange={(e) => onDataChange(prev => ({ ...prev, socialHandle: e.target.value }))}
-                  placeholder="anuragpathak"
+                  onFocus={(e) => e.target.select()}
+                  autoComplete="off"
+                  placeholder="e.g. anuragpathak"
                   maxLength={24}
                   className="w-full pl-9 pr-3 py-2 rounded-xl bg-[#082C2A] border border-[#8CAAA0]/30 text-white placeholder-gray-500 focus:outline-none focus:border-[#F4C542] text-xs font-mono-code"
                 />
@@ -177,6 +181,8 @@ export const EditorTabs: React.FC<EditorTabsProps> = ({
                     type="text"
                     value={data.customRole || ''}
                     onChange={(e) => onDataChange(prev => ({ ...prev, customRole: e.target.value }))}
+                    onFocus={(e) => e.target.select()}
+                    autoComplete="off"
                     placeholder="Custom role"
                     maxLength={30}
                     className="w-full px-3 py-1.5 rounded-lg bg-[#082C2A] border border-[#F4C542]/60 text-white text-xs"
@@ -239,8 +245,10 @@ export const EditorTabs: React.FC<EditorTabsProps> = ({
                 </div>
                 <input
                   type="text"
-                  value={data.motto || 'BUILT TO SHIP.'}
+                  value={data.motto || ''}
                   onChange={(e) => onDataChange(prev => ({ ...prev, motto: e.target.value }))}
+                  onFocus={(e) => e.target.select()}
+                  autoComplete="off"
                   placeholder="BUILT TO SHIP."
                   maxLength={36}
                   className="w-full pl-9 pr-3 py-2 rounded-xl bg-[#082C2A] border border-[#8CAAA0]/30 text-white focus:outline-none focus:border-[#F4C542] text-xs font-mono-code uppercase font-semibold"
@@ -270,6 +278,8 @@ export const EditorTabs: React.FC<EditorTabsProps> = ({
               type="text"
               value={data.serialNumber}
               onChange={(e) => onDataChange(prev => ({ ...prev, serialNumber: e.target.value }))}
+              onFocus={(e) => e.target.select()}
+              autoComplete="off"
               placeholder="HH26-ANU-01"
               maxLength={20}
               className="w-full px-3 py-2 rounded-xl bg-[#082C2A] border border-[#8CAAA0]/30 text-white text-xs font-mono-code uppercase font-bold"
@@ -321,6 +331,7 @@ export const EditorTabs: React.FC<EditorTabsProps> = ({
                       handleAddStackTag(customStackInput);
                     }
                   }}
+                  autoComplete="off"
                   placeholder="Type tag + Enter"
                   maxLength={16}
                   className="flex-1 px-3 py-1.5 rounded-lg bg-[#082C2A] border border-[#8CAAA0]/30 text-white text-xs font-mono-code"

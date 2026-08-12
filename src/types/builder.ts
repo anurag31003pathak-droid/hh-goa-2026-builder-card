@@ -103,13 +103,13 @@ export const DEMO_PHOTO_ASSET = demoBuilderPhoto;
 
 export const DEFAULT_BUILDER: BuilderData = {
   photoUrl: demoBuilderPhoto,
-  name: 'Anurag Pathak',
+  name: '',
   role: 'AI Engineer',
   customRole: '',
   stack: ['React', 'Node.js', 'AI', 'Python'],
   title: 'THE MODEL WHISPERER',
   serialNumber: 'HH26-ANU-01',
-  socialHandle: 'anuragpathak',
+  socialHandle: '',
   motto: 'BUILT TO SHIP.',
   statusBadge: 'READY TO BUILD',
   photoZoom: 1.0,
